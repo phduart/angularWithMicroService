@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { AgGridAngular } from 'ag-grid-angular';
 import { ButtonRendererComponent } from './renderer/btn-renderer.component';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -19,9 +18,9 @@ export class AppComponent {
   title = 'angularSearch';
 
   columnDefs = [
-      {headerName: 'Make', field: 'make', sortable: true, resizable: true, width: 250 },
-      {headerName: 'Model', field: 'model', sortable: true, resizable: true, width: 250 },
-      {headerName: 'Price', field: 'price', sortable: true, resizable: true, width: 250 },
+      {headerName: 'Nome', field: 'nome', sortable: true, resizable: true, width: 250 },
+      {headerName: 'Sobrenome', field: 'sobrenome', sortable: true, resizable: true, width: 250 },
+      {headerName: 'Salário', field: 'salario', sortable: true, resizable: true, width: 250 },
       {
         headerName: '',
         cellRenderer: 'buttonRenderer',
@@ -34,23 +33,23 @@ export class AppComponent {
       }
   ];
 
-  constructor(private http: HttpClient) {
+  constructor(private appService: AppService) { }
+
+  ngOnInit() {
     this.frameworkComponents = {
       buttonRenderer: ButtonRendererComponent,
     }
-  }
-
-  onBtnClick1(e) {
-    console.log(e);
-  }
-  ngOnInit() {
-      this.rowData = this.http.get('https://raw.githubusercontent.com/ag-grid/ag-grid/master/grid-packages/ag-grid-docs/src/sample-data/rowData.json');
+    this.rowData = this.appService.getPessoas();
   }
 
   OnGridReady(params){
     this.gridApi=params.api;
     this.gridOptions=params.api;
     params.api.sizeColumnsToFit();
+  }
+
+  onBtnClick1(e) {
+    console.log(e);
   }
 
   onRowClicked(params){
