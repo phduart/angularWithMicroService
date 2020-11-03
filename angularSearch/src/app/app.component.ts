@@ -18,7 +18,8 @@ export class AppComponent {
   title = 'angularSearch';
 
   columnDefs = [
-      {headerName: 'Nome', field: 'nome', sortable: true, resizable: true, width: 250 },
+      {headerName: 'id', field: 'id', hide: true},
+      {headerName: 'Nome', field: 'nome', sortable: true, resizable: true, width: 250},
       {headerName: 'Sobrenome', field: 'sobrenome', sortable: true, resizable: true, width: 250 },
       {headerName: 'Salário', field: 'salario', sortable: true, resizable: true, width: 250 },
       {
@@ -48,8 +49,11 @@ export class AppComponent {
     params.api.sizeColumnsToFit();
   }
 
-  onBtnClick1(e) {
-    console.log(e);
+  async onBtnClick1(e) {
+    console.log(e.rowData.id);
+    this.appService.deletePessoas(e.rowData.id);
+    await this.delay(500);
+    this.refreshData();
   }
 
   onRowClicked(params){
@@ -60,6 +64,18 @@ export class AppComponent {
     if(params.colDef.field == "teste"){
       console.log(params);
     }
+  }
+
+  refreshData() {
+    this.rowData = this.appService.getPessoas();
+  }
+
+  private delay(ms: number): Promise<boolean> {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(true);
+      }, ms);
+    });
   }
 
 }
